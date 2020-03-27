@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<!-- links to all the files main css, bootstrap etc -->
+<head>
+  <title>21 Savage Fan Site</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="page-header text-center">//Page title
+      <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+      <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+      <!-- logout link -->
+    </div>
+
+    <div class="row">
+
+      <!-- LOCAL INFORMATION -->
+      <div class="col-sm-6">
+        <div class="well">
+          <h3><span class="fa fa-user"></span> Local</h3>
+
+          <% if (user.local.email) { %> <!-- if the userEmail matches the messages, the conditional statement to make message from the user ONLY appear -->
+            <p>
+            <strong>id</strong>: <%= user._id %><br>
+            <strong>email</strong>: <%= user.local.email %><br>
+            <strong>password</strong>: <%= user.local.password %>
+          </p> <!-- above is all the logged in user input information, refer to user.js to see where this information is first defined -->
+
+          <a href="/unlink/local" class="btn btn-default">Unlink</a>
+          <!-- to logout or unlink your account KEYWORD:QUESTION ??? -->
+          <% } else { %>
+          <a href="/connect/local" class="btn btn-default">Connect Local</a>
+          <% } %>  <!-- if there user login email is not avaiable it will make us "login" -->
+
+        </div>
+      </div>
+      <div class="col-sm-6">
+
+        <h3>Messages</h3>
+        <ul class="messages">
+          <% for(var i=0; i< messages.length; i++) {%> <!-- a for loop to go over the class="message" displaying the name, message, thumbUp, thumbDown and trashcan. In addition to any other feature you want to add-->
+          <% if (user.local.email == messages[i].name) { %> <!-- if condition to only display user messages -->
+          <li class="message"> <!-- class : probably in CSS file -->
+            <span><%= messages[i].name%></span>  <!-- this is how we target information from the database so it can appear in the DOM  -->
+            <span><%= messages[i].msg %></span> <!-- refer to the POST method on line 36 from route.js, line 40-43 --> <!-- KEYWORD:QUESTION confirm where and how message, name etc gets defined --->
+            <span><%= messages[i].thumbUp -= messages[i].thumbDown %></span> <!-- this is a number that sums ups the difference between thumb up and thumps down (number of clicks, format: interger)... from there creating an interger to printed on the page-->
+            <span><i class="fa fa-thumbs-up" aria-hidden="true"></i></span> <!-- this for the thumbs up icon, when clicked it fires the function to count the number of clicks -->
+            <span><i class="fa fa-thumbs-down" aria-hidden="true"></i></span> <!--this is the thumbs dowm icon, when clicked it fires the function to count the number of clicks-->
+            <span><i class="fa fa-trash" aria-hidden="true"></i></span> <!--this is the trashcan icon when clicked it fires the function to delete the the comment--><!-- this connected to the bootstrap link for icons -->
+          </li>
+          <% } %>
+          <% } %>
+        </ul>
+<!--  -->
+        <h2>Add a message</h2>
+        <% if (user.local.email) { %> <!-- a partial conditonal that says if the user is signed it with an valid email, then the content below should appear -->
+        <form action="/messages" method="POST"> <!-- this is the form where we make the  "POST" request for information to be captured to the database -->
+          <input type="text" value="<%= user.local.email %>" name="name"> <!-- an input that display your email, note the name="name" is also referenced route.js line 40-41 -->
+          <input type="text" placeholder="message" name="msg"> <!-- an input that display your message, same as above except name='msg' -->
+          <button type="submit">Submit</button> <!-- a submission button -->
+        </form>
+      </div>
+      <% } %>
+
+    </div>
+    <script src="https://kit.fontawesome.com/077191d827.js" crossorigin="anonymous"></script>
+    <script src="main.js"></script>
+
+</body>
+
+</html>
